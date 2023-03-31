@@ -1,7 +1,7 @@
 // MEX wrapper
 //
-// mex -v -largeArrayDims s:\Projects\Matlab\REO\gstConvolveMap.cpp -outdir s:\Projects\Matlab\REO
-// mex -v -g -largeArrayDims s:\Projects\Matlab\REO\gstConvolveMap.cpp -outdir s:\Projects\Matlab\REO
+// mex -v -largeArrayDims s:\Projects\MatlabUtils\REO\gstConvolveMap.cpp -outdir s:\Projects\MatlabUtils\REO
+// mex -v -g -largeArrayDims s:\Projects\MatlabUtils\REO\gstConvolveMap.cpp -outdir s:\Projects\MatlabUtils\REO
 
 #include <Windows.h>
 
