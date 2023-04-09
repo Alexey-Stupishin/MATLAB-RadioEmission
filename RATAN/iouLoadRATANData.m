@@ -1,6 +1,16 @@
-function data = iouLoadRATANData(filename)
+function data = iouLoadRATANData(filename, switch_modes)
+
+if ~exist('switch_modes', 'var')
+    switch_modes = false;
+end
+
+data = [];
 
 [header, params, row, mode] = l_readHeader(filename);
+if isempty(header)
+    return
+end
+
 M = dlmread(filename, '', row, 0);
 
 if strcmp(mode, 'spectra')
@@ -30,6 +40,12 @@ if strcmp(mode, 'spectra')
     data.qs = data.qs';
 end
 
+if switch_modes
+    left = data.left;
+    data.left = data.right;
+    data.right = left;
+end
+
 end
 
 %--------------------------------------------------------------------------
@@ -41,6 +57,10 @@ params = [];
 
 mode = '';
 fid = fopen(filename, 'r');
+
+if fid < 0
+    return
+end
 
 predefined = {'RATAN Spectra-At-Positions Data File ', 'version';
               'RATAN Selected Scans Data File ', 'version';
