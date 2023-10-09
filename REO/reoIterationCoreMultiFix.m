@@ -30,7 +30,8 @@ resRv = [];
 resLv = [];
 Tprev = Tc;
 %Tinit = Tc;
-relax = param.relax;
+% relax = param.relax;
+relax = 1;
 cntres = 0;
 cntNT = 0;
 resprev = 0;
@@ -40,9 +41,9 @@ while true
     Hcalc = Hc;
     for km = 1:nreg
         Tc(km, :) = x(km, :).*Tc(km, :);
-        if cntNT > param.relaxStart
-            Tc(km, :) = exp(relax*log(Tc(km, :)) + (1-relax)*log(Tprev(km, :)));
-        end
+%         if cntNT > param.relaxStart
+%             Tc(km, :) = exp(relax*log(Tc(km, :)) + (1-relax)*log(Tprev(km, :)));
+%         end
         Tcx = Tc(km, :);
         Tcx(Tcx < param.Tmin(km)) = param.Tmin(km);
         Tc(km, :) = Tcx;

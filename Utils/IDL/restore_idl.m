@@ -945,14 +945,19 @@ global heap_indices heap_variables h
             thevar=cast(fread(fid,1,'uint32',0,'b'),mytype);
              if typecode==10, % see if we have the needed heap variable
                 whichvar=find(heap_indices==thevar);
-                if (numel(heap_variables)>=whichvar) ...
-                        && ~isempty(heap_variables{whichvar}), ...
-                        thevar=heap_variables{whichvar};
-                else  %put up a warning message to restore heap variables.
-                    warnstring=...
-                        sprintf('Warning!  This variable depends on heap variables.\nYou should restore all the heap variables first!');
-                    if ~ishandle(h), h=warndlg(warnstring); end
-                end
+                
+                if ~isempty(whichvar) % AS
+
+                    if (numel(heap_variables)>=whichvar) ...
+                            && ~isempty(heap_variables{whichvar}), ...
+                            thevar=heap_variables{whichvar};
+                    else  %put up a warning message to restore heap variables.
+                        warnstring=...
+                            sprintf('Warning!  This variable depends on heap variables.\nYou should restore all the heap variables first!');
+                        if ~ishandle(h), h=warndlg(warnstring); end
+                    end
+                    
+                end % AS   
             end           
         case 14 % long int
             thevar=cast(fread(fid,1,'int64',0,'b'),mytype);

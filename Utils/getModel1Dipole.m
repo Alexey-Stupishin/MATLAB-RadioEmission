@@ -13,6 +13,8 @@ posx = 0.5*(nx - 1) + 1;
 
 mu = l_getMu(B0ph, D);
 
+tic
+
 B.x = zeros(nx, ny, nz);
 B.y = zeros(nx, ny, nz);
 B.z = zeros(nx, ny, nz);
@@ -23,8 +25,11 @@ for k = 1:nz
     B.z(:, :, k) = B0.z;
 end
 
+toc
+
 BBm = fpuFieldVal(B);
 xsurf(BBm(:,:,1));
+xmax2(BBm(:,:,end))
 
 end
 

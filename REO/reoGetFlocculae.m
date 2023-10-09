@@ -1,6 +1,6 @@
 function [RB, LB, RBall, LBall] = reoGetFlocculae(hLib, mask, maskn, freqs, pos, diagrH, diagrV, step, param)
 
-load('s:\Projects\MatlabGM\Work\Fontenla2009.mat');
+load('s:\Projects\Matlab\MatlabUtils\Atmosphere\Fontenla2009.mat');
 
 gstSetPreferenceInt(hLib, 'cycloCalc.ConsiderFreeFree', 1);
 gstSetPreferenceInt(hLib, 'cycloCalc.ConsiderFreeFree.Only', 1);

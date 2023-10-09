@@ -52,10 +52,14 @@ else
 end
 handles.Bbase = handles.B;
 handles.B3base = handles.B3;
+
 handles.Bfilt = [];
 if length(varargin) > 1 && ~isempty(varargin{2})
-    handles.Bfilt = varargin{2};
+   handles.B3 = fpu_deltaB(B, varargin{2});
+   handles.B = fpuFieldVal(handles.B3);
+%    handles.Bfilt = varargin{2};
 end
+
 handles.trimdata.LT = [];
 handles.trimdata.RB = [];
 handles.trim = [];

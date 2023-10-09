@@ -3,6 +3,10 @@ function [coords, linesLength, avField, status] = mfoCalcLinesSet(hLib, B, par)
 sz = size(B.x);
 BB = fpuFieldVal(B);
 
+if ~exist('par', 'var')
+    par = [];
+end
+
 if ~isfield(par, 'limV')
     limV = [1, sz(1)];
 else

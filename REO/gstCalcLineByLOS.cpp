@@ -12,7 +12,8 @@
 
 #define REALTYPE__ double
 
-typedef  int (__cdecl *PROTO_gstcCalculateLineFromLOS)(int L, REALTYPE__ *H /* L */, REALTYPE__ *B, REALTYPE__ *cost, REALTYPE__ *_T, REALTYPE__ *_N,
+typedef  int (__cdecl *PROTO_gstcCalculateLineFromLOS)(int L, REALTYPE__ *H /* L */, REALTYPE__ *B, REALTYPE__ *cost, 
+                                                    int La, REALTYPE__ *Ha, REALTYPE__ *_T, REALTYPE__ *_N,
                                                     int nf, REALTYPE__ *pf, int ns4calc, int *s4calc,
                                                     int nLayers, REALTYPE__ *pTauL /* nLayers */,
                                                     int *depth /* 2*nf */, REALTYPE__ *pF /* full intensity, 2*nf */, REALTYPE__ *pTau /* full tau, 2*nf */,
@@ -23,27 +24,30 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 {
     // hLib, L, H, B, c, La, Ha, Na, Ta, f, ns4calc, s4calc, nLayers, pTauL
 
-    HINSTANCE hHSLib = (HINSTANCE)*(UINT64 *)mxGetData(prhs[0]);
+    int c = 0;
+    HINSTANCE hHSLib = (HINSTANCE)*(UINT64 *)mxGetData(prhs[c++]);
 
-    int L = (int)mxGetNumberOfElements(prhs[1]);
-    double *H = (double *)mxGetPr((mxArray *)prhs[1]); // length == L
-    double *B = (double *)mxGetPr((mxArray *)prhs[2]); // length == L
-    double *c = (double *)mxGetPr((mxArray *)prhs[3]); // length == L
-    double *Ta = (double *)mxGetPr((mxArray *)prhs[4]); // length == L
-    double *Na = (double *)mxGetPr((mxArray *)prhs[5]); // length == L
+    int L = (int)mxGetNumberOfElements(prhs[c]);
+    double *H = (double *)mxGetPr((mxArray *)prhs[c++]); // length == L
+    double *B = (double *)mxGetPr((mxArray *)prhs[c++]); // length == L
+    double *cost = (double *)mxGetPr((mxArray *)prhs[c++]); // length == L
+    int La = (int)mxGetNumberOfElements(prhs[c]);
+    double *Ha = (double *)mxGetPr((mxArray *)prhs[c++]); // length == La
+    double *Ta = (double *)mxGetPr((mxArray *)prhs[c++]); // length == La
+    double *Na = (double *)mxGetPr((mxArray *)prhs[c++]); // length == La
 
-    int nf = (int)mxGetNumberOfElements(prhs[6]);
-    double *pf = (double *)mxGetPr((mxArray *)prhs[6]); // length == nf
+    int nf = (int)mxGetNumberOfElements(prhs[c]);
+    double *pf = (double *)mxGetPr((mxArray *)prhs[c++]); // length == nf
 
-    int ns4calc = (int)mxGetNumberOfElements(prhs[7]);
+    int ns4calc = (int)mxGetNumberOfElements(prhs[c]);
     int i;
-    double *ds = (double *)mxGetPr((mxArray *)prhs[7]); // length == ns4calc
+    double *ds = (double *)mxGetPr((mxArray *)prhs[c++]); // length == ns4calc
     int *s4calc = new int[ns4calc];
     for (i = 0; i < ns4calc; i++)
         s4calc[i] = (int)ds[i];
 
-    int nLayers = (int)mxGetNumberOfElements(prhs[8]);
-    double *pTauL = (double *)mxGetPr((mxArray *)prhs[8]); // length == nLayers
+    int nLayers = (int)mxGetNumberOfElements(prhs[c]);
+    double *pTauL = (double *)mxGetPr((mxArray *)prhs[c++]); // length == nLayers
 
     int szh = 64000;
 
@@ -69,7 +73,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     PROTO_gstcCalculateLineFromLOS pfunc = (PROTO_gstcCalculateLineFromLOS)fp;
 
     DWORD rc;
-    (pfunc)(L, H, B, c, Ta, Na, 
+    (pfunc)(L, H, B, cost, 
+            La, Ha, Ta, Na, 
             nf, pf, ns4calc, s4calc,
             nLayers, pTauL,
             depth, pF, pTau, 

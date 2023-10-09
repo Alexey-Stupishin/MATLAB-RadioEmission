@@ -14,7 +14,10 @@ Bc = fpuField2XYZ(Bc0);
 transv = sqrt(Bc.x.^2 + Bc.y.^2);
 Bz = Bc.z;
 Babs = sqrt(transv.^2 + Bc.z.^2);
-Bincl = acos(Bc.z./Babs)*180/pi;
+vincl = Bc.z./Babs;
+vincl(vincl > 1) = 1;
+vincl(vincl < -1) = -1;
+Bincl = acos(vincl)*180/pi;
 Bazim = atan2(Bc.x, Bc.y)*180/pi;
 
 end

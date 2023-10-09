@@ -43,7 +43,7 @@ if par.useinterp
         aiax0 = aiaCent(1) - (aiaSize(1)-1)/2*aiaStep(1);
         aiay0 = aiaCent(2) - (aiaSize(2)-1)/2*aiaStep(2);
         aiaOff = [aiax0 aiay0];
-        aiaMap = iouSAV2Data('s:\Projects\Matlab\Plots\Colormaps\aiaMaps\aia171.sav');
+        aiaMap = iouSAV2Data('s:\Projects\Matlab\MatlabUtils\Plots\Colormaps\aiaMaps\aia171.sav');
         cm.cmap = zeros(length(aiaMap.RED), 3);
         cm.cmap(:, 1) = double(aiaMap.RED)/256;
         cm.cmap(:, 2) = double(aiaMap.GREEN)/256;
@@ -84,18 +84,18 @@ if par.useinterp
 
     xbox3 = [];
     ybox3 = [];
-    if isfield(mfoData, 'stepP') && length(mfoData.stepP) == 3
-        VAR2VCS = crdGet3DRotationMatrices(mfoData.lat, mfoData.lon);
-        comps = VAR2VCS*[0; 0; mfoData.stepP(3)];
-        xbox3 = zeros(size(mfoData.x_box,1), size(mfoData.x_box,2), size(mfoData.B.z, 3));
-        xbox3(:,:,1) = mfoData.x_box;
-        ybox3 = zeros(size(mfoData.y_box,1), size(mfoData.y_box,2), size(mfoData.B.z, 3));
-        ybox3(:,:,1) = mfoData.y_box;
-        for kx = 2:size(xbox3, 3)
-            xbox3(:,:,kx) = xbox3(:,:,kx-1) + comps(1);
-            ybox3(:,:,kx) = ybox3(:,:,kx-1) + comps(2);
-        end
-    end
+%     if isfield(mfoData, 'stepP') && length(mfoData.stepP) == 3
+%         VAR2VCS = crdGet3DRotationMatrices(mfoData.lat, mfoData.lon);
+%         comps = VAR2VCS*[0; 0; mfoData.stepP(3)];
+%         xbox3 = zeros(size(mfoData.x_box,1), size(mfoData.x_box,2), size(mfoData.B.z, 3));
+%         xbox3(:,:,1) = mfoData.x_box;
+%         ybox3 = zeros(size(mfoData.y_box,1), size(mfoData.y_box,2), size(mfoData.B.z, 3));
+%         ybox3(:,:,1) = mfoData.y_box;
+%         for kx = 2:size(xbox3, 3)
+%             xbox3(:,:,kx) = xbox3(:,:,kx-1) + comps(1);
+%             ybox3(:,:,kx) = ybox3(:,:,kx-1) + comps(2);
+%         end
+%     end
 end
 
 if (WOLines)
