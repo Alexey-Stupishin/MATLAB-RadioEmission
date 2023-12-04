@@ -215,6 +215,8 @@ if (abs(outsource.DATA_P) > 90)
     end
     source.CRPIX1 = source.NAXIS1 - source.CRPIX1 + 1;
     source.CRPIX2 = source.NAXIS2 - source.CRPIX2 + 1;
+    source.CRVAL1 = - source.CRVAL1;
+    source.CRVAL2 = - source.CRVAL2;
     outsource.DATA_P = outsource.DATA_P - sign(outsource.DATA_P)*180;
 end
 

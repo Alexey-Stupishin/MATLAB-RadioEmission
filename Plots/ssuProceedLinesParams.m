@@ -22,6 +22,7 @@ par.B_from = 15;
 par.hmax = 50000;
 par.hrange = [];
 par.closed = true;
+par.half_opened = true;
 par.opened = true;
 par.lngmax = 15;
 

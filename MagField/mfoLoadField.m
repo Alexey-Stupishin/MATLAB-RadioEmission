@@ -28,6 +28,7 @@ mfoData.type = '';
 mfoData.version = '';
 mfoData.version_info = '';
 mfoData.B = [];
+mfoData.absB = [];
 mfoData.Bpot = [];
 mfoData.Bmod = [];
 mfoData.cont = [];
@@ -143,6 +144,10 @@ catch sle % not mat-file, try others
             mfoData = [];
         end
     end
+end
+
+if ~isempty(mfoData)
+    mfoData.absB = fpuFieldVal(mfoData.B);
 end
 
 % if ~isempty(mfoData) && (exist('rangev', 'var') || exist('rangeh', 'var'))

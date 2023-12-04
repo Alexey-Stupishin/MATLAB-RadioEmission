@@ -84,18 +84,18 @@ if par.useinterp
 
     xbox3 = [];
     ybox3 = [];
-%     if isfield(mfoData, 'stepP') && length(mfoData.stepP) == 3
-%         VAR2VCS = crdGet3DRotationMatrices(mfoData.lat, mfoData.lon);
-%         comps = VAR2VCS*[0; 0; mfoData.stepP(3)];
-%         xbox3 = zeros(size(mfoData.x_box,1), size(mfoData.x_box,2), size(mfoData.B.z, 3));
-%         xbox3(:,:,1) = mfoData.x_box;
-%         ybox3 = zeros(size(mfoData.y_box,1), size(mfoData.y_box,2), size(mfoData.B.z, 3));
-%         ybox3(:,:,1) = mfoData.y_box;
-%         for kx = 2:size(xbox3, 3)
-%             xbox3(:,:,kx) = xbox3(:,:,kx-1) + comps(1);
-%             ybox3(:,:,kx) = ybox3(:,:,kx-1) + comps(2);
-%         end
-%     end
+    if isfield(mfoData, 'stepP') && length(mfoData.stepP) == 3
+        VAR2VCS = crdGet3DRotationMatrices(mfoData.lat, mfoData.lon);
+        comps = VAR2VCS*[0; 0; mfoData.stepP(3)];
+        xbox3 = zeros(size(mfoData.x_box,1), size(mfoData.x_box,2), size(mfoData.B.z, 3));
+        xbox3(:,:,1) = mfoData.x_box;
+        ybox3 = zeros(size(mfoData.y_box,1), size(mfoData.y_box,2), size(mfoData.B.z, 3));
+        ybox3(:,:,1) = mfoData.y_box;
+        for kx = 2:size(xbox3, 3)
+            xbox3(:,:,kx) = xbox3(:,:,kx-1) + comps(1);
+            ybox3(:,:,kx) = ybox3(:,:,kx-1) + comps(2);
+        end
+    end
 end
 
 if (WOLines)
@@ -143,11 +143,12 @@ for k = 1:length(linesLength)
     if ~isempty(idx)
         cc(:, idx(1):end) = [];
     end
-    isClosed = bitand(status(k), 4);
+    isClosed = bitand(status(k), 4) ~= 0;
+    isHalfOpened = bitand(status(k), 16) ~= 0;
     
     if ~isempty(cc) && avField(k) > par.Bmax && size(cc, 2) >= par.lngmax ...
      && par.hrange(1) <= max(cc(3, :)) && max(cc(3, :)) <= par.hrange(2) ...
-     && (isClosed && par.closed || ~isClosed && par.opened)
+     && (isClosed && par.closed || isHalfOpened && par.half_opened || ~(isClosed || isHalfOpened) && par.opened)
         ccp = cc*mfoData.step(1);
         %plot3(hAxp, ccp(2, :)+1, ccp(1, :)+1, ccp(3, :)+1, 'Color', par.lcol, 'LineWidth', par.lw); hold on
         patch(hAxp, [ccp(2, :)+1 NaN],[ccp(1, :)+1 NaN],[ccp(3, :)+1 NaN],'black','EdgeColor',par.lcol, 'LineWidth', par.lw,...

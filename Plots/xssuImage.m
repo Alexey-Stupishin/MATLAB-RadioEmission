@@ -24,6 +24,6 @@ end
 
 figure;
 hAx = gca;
-[lims, cb, hIm] = ssuImage(hAx, imdata, scale, offset, cmapdata, nodatascale, isbar, alpha);
+[lims, cb, hIm] = ssuImage(hAx, double(imdata), scale, offset, cmapdata, nodatascale, isbar, alpha);
 
 end

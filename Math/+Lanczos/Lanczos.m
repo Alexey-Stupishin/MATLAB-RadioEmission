@@ -13,7 +13,7 @@ classdef Lanczos < handle
             end
             this.a = a_;
             if ~exist('n_steps_', 'var')
-                n_steps_= 100000;
+                n_steps_= 1000000;
             end
             this.n_steps = n_steps_;
             
