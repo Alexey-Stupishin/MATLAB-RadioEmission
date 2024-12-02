@@ -1,7 +1,7 @@
 // MEX wrapper
 //
-// mex -v -largeArrayDims s:\Projects\Matlab\REO\gstCalcInit.cpp -outdir s:\Projects\Matlab\REO
-// mex -v -g -largeArrayDims s:\Projects\Matlab\REO\gstCalcInit.cpp -outdir s:\Projects\Matlab\REO
+// mex -v -largeArrayDims s:\Projects\Matlab\MatlabUtils\REO\gstCalcInit.cpp -outdir s:\Projects\Matlab\MatlabUtils\REO
+// mex -v -g -largeArrayDims s:\Projects\Matlab\MatlabUtils\REO\gstCalcInit.cpp -outdir s:\Projects\Matlab\MatlabUtils\REO
 //
 
 #include <Windows.h>
