@@ -31,6 +31,15 @@ for kx = rx
     end
 end
 
+coords = [];
+linesLength = [];
+avField = [];
+status = [];
+
+if isempty(seeds)
+    return
+end
+
 [~, ~, avField, ~, ~, ~, ~, ~, coords, ~, linesLength, ~, status] = ...
     mfoGetLines(hLib, sz, B.x, B.y, B.z, size(seeds, 2), seeds, 1e8, 0, 0, 1);
 

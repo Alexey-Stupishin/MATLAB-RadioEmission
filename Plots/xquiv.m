@@ -33,6 +33,6 @@ if ~isempty(strfind(sshow, 'Y'));
     hAx_y = gca;
 end
 
-ssuShowQuiv4(hAx, hAx_x, hAx_y, isQuiv, B3, level, lineStep);
+ssuShowQuiv4(hAx, hAx_x, hAx_y, isQuiv, B3, level, lineStep, 2);
 
 end

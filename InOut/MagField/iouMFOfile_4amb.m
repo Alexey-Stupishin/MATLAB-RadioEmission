@@ -1,4 +1,4 @@
-function iouXYZ_sst_4amb(xyz_file, todir)
+function iouMFOfile_4amb(xyz_file, todir)
 
 global mfrdata
 

@@ -1,24 +1,30 @@
 function sf_update(handles)
 
-global sf_types_what sf_types_how sf_types_filter sf_types_filter_mode sf_types_FOV
+global sf_types_what_string sf_types_how sf_types_filter sf_types_filter_mode sf_types_FOV sf_types_what_quiver sf_types_proj
 
 what = get(handles.popupmenu_what, 'Value');
 p.how = get(handles.popupmenu_how, 'Value');
-qcond = ~isempty(handles.B3) && p.how == sf_types_how.Image && (what == sf_types_what.B || what == sf_types_what.Bz);
+qcond = p.how == sf_types_how.Image && ~isempty(sf_types_what_quiver{what});
 set(handles.checkbox_quiver, 'Enable', pick(qcond, 'on', 'off'));
 if ~qcond
     set(handles.checkbox_quiver, 'Value', 0);
 end
 
-switch what
-    case sf_types_what.B
-        p.B = handles.B;
-    case sf_types_what.Bx
-        p.B = handles.B3.x;
-    case sf_types_what.By
-        p.B = handles.B3.y;
-    case sf_types_what.Bz
-        p.B = handles.B3.z;
+p.Bq1 = [];
+p.Bq2 = [];
+type = sf_types_what_string{what};
+if handles.dim_mode == 1
+    p.B = sf_get_data(handles, what);
+elseif ~any(strcmp(type, {'Dangle', 'Dresidual'}))
+    [p.B, p.Bq1, p.Bq2] = sf_get_data(handles, what);
+    if ~get(handles.checkbox_quiver, 'Value')
+        p.Bq1 = [];
+        p.Bq2 = [];
+    end
+elseif strcmp(type, 'Dangle')
+    p.B = handles.M_angle;
+elseif strcmp(type, 'Dresidual')
+    p.B = handles.M_res;
 end
 
 p.level = round(get(handles.slider1, 'Value'));
@@ -53,25 +59,9 @@ p.az = str2double(get(handles.text_az, 'String'));
 p.el = str2double(get(handles.text_el, 'String'));
 
 p.trim = [];
+p.select = handles.select;
+p.bound_shift = handles.bound_shift;
 
-p.Bq1 = [];
-p.Bq2 = [];
-if get(handles.checkbox_quiver, 'Value')
-    switch what
-        case sf_types_what.B
-            p.Bq1 = handles.B3.x;
-            p.Bq2 = handles.B3.y;
-        case sf_types_what.Bx
-            p.Bq1 = handles.B3.y;
-            p.Bq2 = handles.B3.z;
-        case sf_types_what.By
-            p.Bq1 = handles.B3.z;
-            p.Bq2 = handles.B3.x;
-        case sf_types_what.Bz
-            p.Bq1 = handles.B3.x;
-            p.Bq2 = handles.B3.y;
-    end
-end
 p.Bfilt = handles.Bfilt;
 
 p.levels = str2double(get(handles.edit_levels, 'String'));
@@ -87,10 +77,22 @@ end
 tstate = pick(isTrim, 'on', 'off');
 set(handles.popupmenu_trim, 'Enable', tstate);
 p.trim_draw = get(handles.popupmenu_trim, 'Value') == sf_types_FOV.Trim;
+p.allow_trim = get(handles.popupmenu_proj, 'Value') == sf_types_proj.XY;
 
 setappdata(handles.axes1, 'trim', p.trim_draw);
 setappdata(handles.axes1, 'az', p.az);
 setappdata(handles.axes1, 'el', p.el);
+
+if ~isempty(p.select)
+    set(handles.edit_x, 'String', p.select.xy(2));
+    set(handles.edit_y, 'String', p.select.xy(1));
+    value = p.B(p.select.xy(1)-p.bound_shift(1), p.select.xy(2)-p.bound_shift(2), p.level);
+    set(handles.edit_val, 'String', value, 'ForegroundColor', pick(value > 0, 'b', 'r'));
+else
+    set(handles.edit_x, 'String', []);
+    set(handles.edit_y, 'String', []);
+    set(handles.edit_val, 'String', []);
+end
 
 p = sf_draw(handles.axes1, p);
 
@@ -104,6 +106,13 @@ if ~isempty(p.maxBbyLevel.val)
     end
 end
 
-view(handles.axes1, p.az, p.el);
+az = p.az;
+el = p.el;
+if p.how ~= sf_types_how.Surface
+    az = 0;
+    el = 90;
+end
+view(handles.axes1, az, el);
+drawnow
 
 end

@@ -20,7 +20,7 @@ par.height_from = 2;
 
 par.B_from = 15;
 par.hmax = 50000;
-par.hrange = [];
+par.hrange = [0 Inf];
 par.closed = true;
 par.half_opened = true;
 par.opened = true;

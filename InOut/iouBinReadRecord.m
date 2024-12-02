@@ -23,8 +23,8 @@ maxdims = fread(fid, 1, 'integer*4');
 dims = fread(fid, maxdims, nformat);
 dims = dims';
 
-%[data, count] = fread(fid, nelems, fmt);
-data = fread(fid, nelems, fmt);
+[data, count] = fread(fid, nelems, fmt);
+%data = fread(fid, nelems, fmt);
 
 if ~all(dims(2:end) == 1)
     data = reshape(data, dims(1:ndims));

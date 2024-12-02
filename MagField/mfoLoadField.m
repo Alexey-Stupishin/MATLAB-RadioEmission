@@ -217,7 +217,7 @@ elseif isfield(out, 'OBSTIME')
 end
 mfoData.fileid = getfieldsafe(out, 'FILEID', '');
 
-mfoData.R = out.R_ARC;                              % arcsec
+mfoData.R = getfieldsafe(out, 'out.R_ARC', 960); % arcsec
 
 mfoData.stepP = mfoData.step/mfoData.R;
 mfoData.baseP = l_base(mfoData);

@@ -1,4 +1,4 @@
-function [outmap, hmlim, vmlim, hcrnew, vcrnew] = crdPlaneMapRotate(map, instep, angle, outstep, hcrpix, vcrpix, hcrval, vcrval, outval)
+function [outmap, hmlim, vmlim, hcrnew, vcrnew] = crdPlaneMapRotate(map, instep, angle, outstep, hcrpix, vcrpix, hcrval, vcrval, outval, intMeth, extMeth)
 % angle - ccw
 % steps = [h, v]
 
@@ -7,7 +7,7 @@ outmap = [];
 if length(instep) == 1
     instep = [instep instep];
 end
-if ~exist('outstep', 'var')
+if ~exist('outstep', 'var') || isempty(outstep)
     outstep = instep;
 end
 if length(outstep) == 1
@@ -15,10 +15,10 @@ if length(outstep) == 1
 end
 
 if ~exist('hcrpix', 'var') || isempty(hcrpix)
-    hcrpix = (size(map,2)-1)/2;
+    hcrpix = (size(map,2)+1)/2;
 end
 if ~exist('vcrpix', 'var') || isempty(vcrpix)
-    vcrpix = (size(map,1)-1)/2;
+    vcrpix = (size(map,1)+1)/2;
 end
 if ~exist('hcrval', 'var') || isempty(hcrval)
     hcrval = 0;
@@ -26,14 +26,22 @@ end
 if ~exist('vcrval', 'var') || isempty(vcrval)
     vcrval = 0;
 end
-if ~exist('outval', 'var')
+if ~exist('outval', 'var') || isempty(outval)
     outval = 0;
 end
+if ~exist('intMeth', 'var')
+    intMeth = 'nearest';
+end
+if ~exist('extMeth', 'var')
+    extMeth = 'none';
+end
 
-hbox(1) = -hcrpix*instep(1) - hcrval;
-hbox(2) = hbox(1) + instep(1)*(size(map,2)-1);
-vbox(1) = -vcrpix*instep(2) - vcrval;
-vbox(2) = vbox(1) + instep(2)*(size(map,1)-1);
+hbox(1) = -(hcrpix-1)*instep(1) - hcrval;
+hbox(2) =  (hcrpix-1)*instep(1) - hcrval;
+vbox(1) = -(vcrpix-1)*instep(2) - vcrval;
+vbox(2) =  (vcrpix-1)*instep(2) - vcrval;
+
+
 
 sp = sind(angle);
 cp = cosd(angle);
@@ -66,7 +74,7 @@ end
 
 outmap = zeros(nh, nv);
 
-F = griddedInterpolant(map);
+F = griddedInterpolant(map, intMeth, extMeth);
 
 for kh = 1:nh
     for kv = 1:nv
@@ -76,9 +84,9 @@ for kh = 1:nh
         hb = (ph*cp - pv*sp);
         vb = (ph*sp + pv*cp);
         if hb < hbox(1) || hb > hbox(2) || vb < vbox(1) || vb > vbox(2)
-            outmap(kh, kv) = outval;
+            outmap(kv, kh) = outval;
         else
-            outmap(kh, kv) = F((hb-hbox(1))/instep(1)+1, (vb-vbox(1))/instep(2)+1);
+            outmap(kv, kh) = F((vb-vbox(1))/instep(2)+1, (hb-hbox(1))/instep(1)+1);
         end
     end
 end

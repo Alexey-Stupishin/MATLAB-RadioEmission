@@ -112,15 +112,17 @@ par.hrange = hmult*par.hrange;
 par.hmax = hmult*par.hmax;
 
 disp('start...')
-ticID = tic;
-Fx = griddedInterpolant(xbox3);
-Fy = griddedInterpolant(ybox3);
-ncw = length(coords)/4;
-ccr = reshape(coords, [4 ncw]);
-ccw = ccr(1:3, :)';
-ccwx = Fx(ccw+1)'*mfoData.R;
-ccwy = Fy(ccw+1)'*mfoData.R;
-toc(ticID)
+if isfield(mfoData, 'stepP') && length(mfoData.stepP) == 3
+    ticID = tic;
+    Fx = griddedInterpolant(xbox3);
+    Fy = griddedInterpolant(ybox3);
+    ncw = length(coords)/4;
+    ccr = reshape(coords, [4 ncw]);
+    ccw = ccr(1:3, :)';
+    ccwx = Fx(ccw+1)'*mfoData.R;
+    ccwy = Fy(ccw+1)'*mfoData.R;
+    toc(ticID)
+end
 
 % disp('start...')
 % ticID = tic;
@@ -139,13 +141,14 @@ for k = 1:length(linesLength)
     select = coords(pos:next-1);
     nc = length(select)/4;
     cc = reshape(select, [4 nc]);
+    
     idx = find(cc(3, :) > par.hmax);
     if ~isempty(idx)
         cc(:, idx(1):end) = [];
     end
     isClosed = bitand(status(k), 4) ~= 0;
     isHalfOpened = bitand(status(k), 16) ~= 0;
-    
+
     if ~isempty(cc) && avField(k) > par.Bmax && size(cc, 2) >= par.lngmax ...
      && par.hrange(1) <= max(cc(3, :)) && max(cc(3, :)) <= par.hrange(2) ...
      && (isClosed && par.closed || isHalfOpened && par.half_opened || ~(isClosed || isHalfOpened) && par.opened)
@@ -169,11 +172,12 @@ for k = 1:length(linesLength)
                         'EdgeAlpha','interp')                    
             end
         end
-        
+
         if par.draw
             drawnow
         end
     end
+        
     pos = next;
     posp = nextp;
 

@@ -17,11 +17,13 @@ for x = 1:sz(1)
         cnt = 0;
         for xk = 1:n
             for yk = 1:n
-                xx = x+xk-r-1;
-                yy = y+yk-r-1;
-                if xx > 0 && xx <= sz(1) && yy > 0 && yy <= sz(2) && kernel(xk, yk)
-                    cnt = cnt + 1;
-                    collect(cnt) = s(xx, yy);
+                if ~isnan(s(x, y))
+                    xx = x+xk-r-1;
+                    yy = y+yk-r-1;
+                    if kernel(xk, yk) && xx > 0 && xx <= sz(1) && yy > 0 && yy <= sz(2) && ~isnan(s(xx, yy))
+                        cnt = cnt + 1;
+                        collect(cnt) = s(xx, yy);
+                    end
                 end
             end
         end

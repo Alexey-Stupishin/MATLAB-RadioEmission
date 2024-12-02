@@ -4,7 +4,8 @@ if ~exist('wave', 'var')
     wave = 171;
 end
 
-aiaMap = iouSAV2Data(['s:\Projects\Matlab\Plots\Colormaps\aiaMaps\aia' num2str(wave) '.sav']);
+%aiaMap = iouSAV2Data(['s:\Projects\Matlab\MatlabUtils\Plots\Colormaps\aiaMaps\aia' num2str(wave) '.sav']);
+aiaMap = iouSAV2Data(['s:\Projects\Matlab\MatlabUtils\Plots\Colormaps\aiaMaps\aia' num2str(wave) '.sav']);
 
 cmap = zeros(length(aiaMap.RED), 3);
 cmap(:, 1) = double(aiaMap.RED)/256;

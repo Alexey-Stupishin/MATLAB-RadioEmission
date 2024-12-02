@@ -5,11 +5,11 @@ assert(sz(1) == sz(2))
 n = sz(1);
 c = floor((n+1)/2);
 
-input = true(size(im));
+input = false(size(im));
 input(im ~= 0) = true;
 sz = size(im);
 
-d = zeros(sz(1)+(n-1), sz(2)+(n-1));
+d = ones(sz(1)+(n-1), sz(2)+(n-1));
 
 for x = 1:n
     for y = 1:n

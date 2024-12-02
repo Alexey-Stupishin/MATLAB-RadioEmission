@@ -206,6 +206,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 
     fp = GetProcAddress(hHSLib, TEXT("gstcCalculateMapAll"));
     PROTO_gstCalculateMapAll pgstcalcmap = (PROTO_gstCalculateMapAll)fp;
+
+    MEMORYSTATUSEX mem;
+    mem.dwLength = sizeof(mem);
+    GlobalMemoryStatusEx(&mem);
+
     DWORD RC = (pgstcalcmap)(f, ns4test, s4test, nLayers, pTauL, Mask,
         mode, nBeam, ca, ba,
 		posOrd, posExt,
@@ -214,5 +219,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         pScanOrd, pScanExt, plimits,
         pnRC,
         pTimes, pQuanc82Cnt, pLaplas90Cnt, pLaplasCnt);
+
+    GlobalMemoryStatusEx(&mem);
 }
 

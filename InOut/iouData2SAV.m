@@ -33,20 +33,35 @@ fprintf(fid, 'Win32   ');
 fwrite(fid, 3, 'integer*4', 0, 'b');
 fprintf(fid, '8.2 ');
 
-for k = 2:nargin
+to = nargin;
+outtype = 5; % double
+fmt = varargin{end};
+if ischar(fmt) && strncmp(fmt, 'format=', 7)
+    to = to - 1;
+    if strncmp(fmt(8:end), 'int', 3)
+        outtype = 3;
+    elseif strncmp(fmt(8:end), 'single', 6)
+        outtype = 4;
+    end
+end
+
+for k = 2:to
     name = varargin{k-1};
     val = evalin('caller', name);
 %     if (all(all(all(val-floor(val) == 0))))
-%         val = int32(val);
-%         fmt = 'integer*4';
-%         bytesperelem = 4;
-%         outtype = 3;
-%     else
+    if outtype == 3
+        val = int32(val);
+        fmt = 'integer*4';
+        bytesperelem = 4;
+    elseif outtype == 4
+        val = single(val);
+        fmt = 'single';
+        bytesperelem = 4;
+    else
         val = double(val);
         fmt = 'double';
         bytesperelem = 8;
-        outtype = 5;
-%     end
+    end
     nv = numel(val);
     nd = ndims(val);
     szd = size(val);

@@ -13,7 +13,7 @@ VAR2VCS = [
            -sinlat*sinlon   coslon, coslat*sinlon; ...
            -sinlat*coslon, -sinlon, coslat*coslon; ...
           ];
-VCS2VAR = VAR2VCS^-1;             
+VCS2VAR = VAR2VCS';             
 
 vcos = crdVCos(lat, lon);
 
